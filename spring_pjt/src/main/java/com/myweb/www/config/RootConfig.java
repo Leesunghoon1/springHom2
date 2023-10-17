@@ -1,0 +1,106 @@
+package com.myweb.www.config;
+
+import javax.sql.DataSource;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
+@Configuration
+//이 어노테이션은 Spring Configuration 클래스를 나타냅니다. 
+//Spring에게 이 클래스가 애플리케이션의 구성 설정을 포함하고 있는 클래스임을 알려줍니다.
+
+@MapperScan(basePackages = {"com.myweb.www.repository"})
+//이 어노테이션은 MyBatis와 관련하여 사용되며, 
+//MyBatis 매퍼 인터페이스가 위치하는 패키지를 지정합니다. MyBatis는 SQL 매핑을 위해 사용되며, 
+//이 어노테이션을 통해 MyBatis 매퍼 인터페이스의 위치를 스캔하고 빈으로 등록할 수 있습니다.
+
+@ComponentScan(basePackages = {"com.myweb.www.service"})
+//이 어노테이션은 Spring Component 스캔을 구성합니다. 
+//Spring은 지정된 패키지 (com.myweb.www.service) 내에서 컴포넌트로 표시된 클래스를 찾아서 빈으로 등록합니다. 
+//이를 통해 Spring은 서비스 클래스 및 다른 컴포넌트를 자동으로 감지하고 관리할 수 있습니다
+
+
+public class RootConfig {
+	//DB설정부분
+	//전과 달라진 부분 log4jdbc-log4j2 사용
+	//hikariCP 사용
+	
+	@Autowired
+	// Spring 프레임워크에서 종속성을 자동으로 주입하는 데 사용되는 어노테이션
+	ApplicationContext applicationContext;
+	//@Autowired 어노테이션을 사용하여 applicationContext 필드에 Spring 애플리케이션 컨텍스트를 자동으로 주입하고, 
+	//이 컨텍스트를 통해 Spring IoC 컨테이너에서 다른 빈을 관리하고 액세스할 수 있게 됩니다. 
+	//이는 Spring 애플리케이션의 구성, 빈 관리, 의존성 주입 등을 가능하게 하는 중요한 메커니즘입니다.
+	
+	@Bean
+	public DataSource dataSource() {
+		HikariConfig hikaroConfig = new HikariConfig();
+		// log4jdbc-log4j2의 드라이버 클래스 url 사용
+		hikaroConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
+		// 드라이버 클래스는 특정 데이터베이스와의 연결을 수행하는 데 사용됩니다. 
+		//여기서 "net.sf.log4jdbc.sql.jdbcapi.DriverSpy"는 Log4JDBC라고 불리는 데이터베이스 드라이버 클래스입니다.
+		
+		hikaroConfig.setJdbcUrl("jdbc:log4jdbc:mysql://localhost:3306/springtest");
+		
+		hikaroConfig.setUsername("root"); //아이디
+		hikaroConfig.setPassword("mysql"); //비밀번호
+		
+		hikaroConfig.setMaximumPoolSize(5); //최대 커넥션 개수 
+		hikaroConfig.setMinimumIdle(5); //최소 유휴 커넥션 개수(반드시 같은 값으로 설정
+		
+		hikaroConfig.setConnectionTestQuery("SELECT now()");//test 쿼리
+		hikaroConfig.setPoolName("springHikariCP");
+		
+		//config의 추가 설정
+		//cache 사용여부 설정 true
+		hikaroConfig.addDataSourceProperty("dataSource.cachePrepStmts", "true");
+		//mysql 드라이버가 연결당 cache statement의 수에 관한 설정 보통 default 25  250 ~ 500사이 권장
+		hikaroConfig.addDataSourceProperty("dataSource.prepStmtCacheSize", "250");
+		//mysql connection당 캐싱할 preparedStatement의 개수 지정 옵션 default 256  
+		hikaroConfig.addDataSourceProperty("dataSource.prepStmtCacheSqlLimit", "true"); //기본값
+		//mysql 서버에서 최신 이슈가 있을경우 지원받는 설정 server-side 지원 설정 true
+		hikaroConfig.addDataSourceProperty("dataSource.useServerPrepStmts", "true");
+		
+		HikariDataSource hikariDataSource = new HikariDataSource(hikaroConfig);
+		
+		return hikariDataSource;
+	}
+	
+	@Bean
+	public SqlSessionFactory sqlSessionFactory() throws Exception {
+		
+		SqlSessionFactoryBean sqlFactoryBean = new SqlSessionFactoryBean();
+		// 이 코드는 SqlSessionFactory를 생성하기 위한 SqlSessionFactoryBean 객체를 만듭니다. 
+		sqlFactoryBean.setDataSource(dataSource());
+		//setDataSource(dataSource()) 메서드는 SqlSessionFactoryBean 객체에 데이터 소스(Data Source)를 설정합니다. 
+		//dataSource() 메소드는 데이터베이스 연결 정보를 포함하고 있는 데이터 소스를 반환하는 것으로 추정됩니다.
+		
+		sqlFactoryBean.setMapperLocations(
+				applicationContext.getResources("classpath:/mappers/*.xml"));
+		//이 라인은 MyBatis 매퍼(XML 파일)의 위치를 설정하는 부분입니다. 
+		//applicationContext 객체를 사용하여 클래스패스 상의 mappers 디렉토리 아래에 있는 모든 XML 파일을 매퍼로 사용하도록 지정합니다. 
+		//이렇게 지정된 매퍼 파일은 SQL 쿼리와 MyBatis 매퍼 구성을 정의하는 데 사용됩니다.
+		
+		sqlFactoryBean.setConfigLocation(
+				applicationContext.getResource("classpath:/MybatisConfig.xml"));
+		//이 코드는 MyBatis 구성 파일의 위치를 설정하는 부분입니다. 
+		//applicationContext 객체를 사용하여 클래스패스 상에서 MybatisConfig.xml 파일을 찾아 설정 파일로 사용하도록 지정합니다. 
+		//MyBatis 구성 파일에는 MyBatis 설정 및 세부 구성 옵션이 포함될 것입니다.
+		
+		return (SqlSessionFactory)sqlFactoryBean.getObject();
+		//return (SqlSessionFactory) sqlFactoryBean.getObject();: SqlSessionFactoryBean
+		//을 통해 생성된 SqlSessionFactory 객체를 반환합니다. 
+		//이렇게 반환된 SqlSessionFactory 객체는 MyBatis를 사용하여 SQL 세션을 생성하고 데이터베이스와 상호작용하는 데 필요한 핵심 객체입니다.
+		
+	}
+
+}
