@@ -1,0 +1,39 @@
+package com.myweb.www.controller;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.myweb.www.service.BoardService;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Controller
+@RequestMapping("/board/*") //경로
+@Slf4j
+public class BoardController {
+	// 폴더명 : board / mapping : board
+		//mapping => /board/register
+		//목적지 -> /board/register
+	
+	@Inject
+	//주입한다
+	private BoardService bsv;
+	
+	@GetMapping("/register")
+	//"/register" 경로로 들어왔을 때 이 메소드가 실행되도록 지정합니다. 
+	public String boardRegsterGet() {
+		return "/board/register";
+		//"/board/register" 문자열을 반환하고 있으므로, 이는 보통 해당 경로에 대한 뷰 템플릿을 나타냅니다.
+	}
+	
+	@PostMapping("/register")
+	public String register(BoardVO bvo) {
+		
+	}
+	
+	
+}

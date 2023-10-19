@@ -1,0 +1,31 @@
+package com.myweb.www.domain;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+
+@Getter
+@Setter
+@ToString
+@Slf4j
+public class PagingVO {
+	
+	private int pageNo;
+	//현재 페이지 넘버
+	
+	private int qty;
+	//한 페이지의 개시글 수
+	
+	private String type;
+	//검색 처리용
+	
+	public PagingVO() {
+		//아무것도 없는 기본생성자
+		this(1,10);
+	}
+	
+	
+	
+
+}

@@ -1,0 +1,5 @@
+package com.myweb.www.repsitory;
+
+public interface BoardDAO {
+
+}

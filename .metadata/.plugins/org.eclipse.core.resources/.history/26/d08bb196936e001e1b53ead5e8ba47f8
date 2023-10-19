@@ -1,0 +1,16 @@
+package com.myweb.www.handler;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Setter
+@Getter
+@ToString
+public class PagingHandler {
+	
+	private int startPage;
+	//화면에 보이는 페이지네이션 번호
+	 
+
+}

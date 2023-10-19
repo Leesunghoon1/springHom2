@@ -49,7 +49,7 @@ public class RootConfig {
 		// 드라이버 클래스는 특정 데이터베이스와의 연결을 수행하는 데 사용됩니다. 
 		//여기서 "net.sf.log4jdbc.sql.jdbcapi.DriverSpy"는 Log4JDBC라고 불리는 데이터베이스 드라이버 클래스입니다.
 		
-		hikaroConfig.setJdbcUrl("jdbc:log4jdbc:mysql://localhost:3306/springtest");
+		hikaroConfig.setJdbcUrl("jdbc:log4jdbc:mysql://localhost:3306/springdb");
 		
 		hikaroConfig.setUsername("root"); //아이디
 		hikaroConfig.setPassword("mysql"); //비밀번호

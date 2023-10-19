@@ -1,0 +1,52 @@
+package com.myweb.www.service;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import com.myweb.www.domain.BoardVO;
+import com.myweb.www.repository.BoardDAO;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Slf4j
+public class BoardServiceImpl implements BoardService{
+	
+	@Inject
+	private BoardDAO bdao;
+	
+	
+	@Override
+	public int register(BoardVO bvo) {
+
+		return bdao.register(bvo);
+	}
+
+
+	@Override
+	public List<BoardVO> getList(BoardVO bvo) {
+
+		return bdao.getList(bvo);
+		//돌려준다 DAO에 리스트를
+	}
+
+
+	@Override
+	public BoardVO detail(int bno) {
+
+		return bdao.detail(bno);
+	}
+
+
+	@Override
+	public int postModify(BoardVO bvo) {
+
+
+		return bdao.modify(bvo);
+	}
+
+
+}
