@@ -99,3 +99,7 @@
 0:0:0:0:0:0:0:1 - - [20/Oct/2023:01:14:33 +0900] "GET /board/list?type=Open+this+select+menu&keyword=2&pageNo=1&qty=10 HTTP/1.1" 200 6632
 0:0:0:0:0:0:0:1 - - [20/Oct/2023:01:14:58 +0900] "GET /board/detail?bno=304 HTTP/1.1" 200 2957
 0:0:0:0:0:0:0:1 - - [20/Oct/2023:01:15:01 +0900] "GET /board/list?type=Open+this+select+menu&keyword=2&pageNo=1&qty=10 HTTP/1.1" 200 6632
+127.0.0.1 - - [20/Oct/2023:01:16:24 +0900] "GET / HTTP/1.1" 200 1960
+0:0:0:0:0:0:0:1 - - [20/Oct/2023:01:16:24 +0900] "GET / HTTP/1.1" 200 1960
+0:0:0:0:0:0:0:1 - - [20/Oct/2023:01:16:26 +0900] "GET /board/list HTTP/1.1" 200 6375
+0:0:0:0:0:0:0:1 - - [20/Oct/2023:01:16:28 +0900] "GET /board/list?type=t&keyword=2&pageNo=1&qty=10 HTTP/1.1" 200 6400

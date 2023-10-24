@@ -37,10 +37,19 @@
   </select>
   
   <sql id="search">
+  <!-- 이 코드 조각의 이름을 "search"로 정의합니다. 이 이름은 나중에 이 코드 조각을 다른 SQL 문장에서 참조할 때 사용됩니다. -->
   	<if test="type != null">
+  	<!-- 이 부분은 type 매개변수가 null이 아닌 경우에만 SQL 검색 조건을 생성하도록 조건을 설정합니다. -->
   		<trim prefix="where (" suffix=")" prefixOverrides="OR">
+  		<!--이 부분은 SQL WHERE 절을 생성합니다. prefix 속성은 WHERE 절의 시작 부분을 나타내며 
+  		"("로 시작하도록 설정됩니다. suffix속성은WHERE절의 끝 부분을 나타내며 ")"로 끝나도록 설정됩니다.
+  		prefixOverrides속성은 OR` 절을 제거할 때 사용됩니다.  -->
   			<foreach collection="typeToArray" item="type">
+  			<!-- 이 부분은 typeToArray라는 컬렉션을 반복하며 item 변수에 각 항목을 할당합니다. 
+  			이 컬렉션은 type 매개변수를 배열 또는 리스트로 변환한 것으로 보입니다. -->
   				<trim prefix="OR">
+  				<!-- : 이 부분은 각 반복에서 생성된 조건을 OR로 연결합니다. 즉, 
+  				각 반복에서 생성된 검색 조건은 OR 절로 연결됩니다. -->
   					<choose>
   						<when test="type == 't'.toString()">
   							title like concat('%', #{keyword}, '%')

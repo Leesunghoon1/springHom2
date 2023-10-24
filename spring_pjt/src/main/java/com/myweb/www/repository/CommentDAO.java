@@ -1,0 +1,25 @@
+package com.myweb.www.repository;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import com.myweb.www.domain.CommentVO;
+import com.myweb.www.domain.PagingVO;
+
+public interface CommentDAO {
+
+	int post(CommentVO cvo);
+
+	List<CommentVO> getList(int bno);
+
+	int remove(int cno);
+
+	int edit(CommentVO cvo);
+
+	int selectOntBnoTotalCount(long bno);
+
+	List<CommentVO> selectListPaging(@Param("bno") Long bno, @Param("pgvo") PagingVO pgvo);
+
+}
